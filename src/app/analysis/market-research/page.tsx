@@ -1,5 +1,80 @@
 'use client';
-import { BarChart2, Cpu, Banknote, Scale, Target, Calculator, Server, Leaf, Package, Database, CheckCircle, TrendingUp, Zap, Brain, RefreshCw, Download, Rocket, Activity, Users, Globe, AlertTriangle, Shield, Monitor, Lock, Layers, GitBranch, XCircle, Info, Star, Building2, ThumbsUp, ThumbsDown, ArrowRight, Map } from 'lucide-react';
+import { BarChart2, Cpu, Banknote, Scale, Target, Calculator, Server, Leaf, Package, Database, CheckCircle, TrendingUp, Zap, Brain, RefreshCw, Download, Rocket, Activity, Users, Globe, AlertTriangle, Shield, Monitor, Lock, Layers, GitBranch, XCircle, Info, Star, Building2, ThumbsUp, ThumbsDown, ArrowRight, Map, FileText, Gavel, Eye, ShieldAlert, Megaphone, Share2, MousePointerClick, MessageSquare, Search, PenTool, ShoppingCart } from 'lucide-react';
+
+const CHANNELS = [
+    { name: 'SEO & Content', icon: Search, score: 85, cost: 'Low CAC', speed: 'Slow', fit: 'High', note: 'Strong long-term moat for SaaS.' },
+    { name: 'Cold Outbound (Email/LI)', icon: MessageSquare, score: 70, cost: 'Med CAC', speed: 'Fast', fit: 'Medium', note: 'Good for early B2B validation.' },
+    { name: 'Performance Meta/Google', icon: MousePointerClick, score: 45, cost: 'High CAC', speed: 'Fast', fit: 'Low', note: 'Too expensive for current LTV.' },
+    { name: 'Partnerships & Affiliates', icon: Users, score: 60, cost: 'Low CAC', speed: 'Med', fit: 'Medium', note: 'Requires strong initial traction.' },
+    { name: 'Product-Led Growth (Virality)', icon: Share2, score: 90, cost: 'Zero CAC', speed: 'Med', fit: 'High', note: 'Ideal. Build invite loops into product.' },
+];
+
+const GTM_PHASES = [
+    { phase: '01 / Validate', title: 'Founder-Led Sales', target: 'First 10 Paying', actions: ['Warm network outreach', 'Manual LinkedIn prospecting', 'Concierge onboarding'], metric: 'Conversion Rate' },
+    { phase: '02 / Build Engine', title: 'Content & SEO', target: 'Next 100 Users', actions: ['Publish 5 bottom-of-funnel posts', 'Set up automated email drip', 'Launch on Product Hunt'], metric: 'Organic Traffic' },
+    { phase: '03 / Scale', title: 'Paid & Partnerships', target: '1000+ Users', actions: ['Test LinkedIn Ads ($50/day)', 'Recruit 5 affiliate partners', 'Hire first SDR'], metric: 'CAC : LTV Ratio' },
+];
+
+const CAC_METRICS = [
+    { label: 'Target CAC', value: '₹1,500', status: 'optimal' },
+    { label: 'Estimated LTV', value: '₹12,000', status: 'optimal' },
+    { label: 'LTV:CAC Ratio', value: '8.0x', status: 'optimal', note: 'Exceptional (Target is 3x)' },
+    { label: 'Payback Period', value: '4 Months', status: 'warning', note: 'Target is < 12 months' },
+];
+
+const gtmColor = (s: number) => s >= 80 ? '#8B5CF6' : s >= 60 ? '#10B981' : s >= 40 ? '#F59E0B' : '#EF4444';
+const gtmBg = (s: number) => s >= 80 ? 'rgba(139,92,246,0.1)' : s >= 60 ? 'rgba(16,185,129,0.1)' : s >= 40 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)';
+
+const LEGAL_FLAGS = [
+    { severity: 'critical', color: '#EF4444', title: 'Data Privacy Compliance', text: 'User data collection requires DPDP Act 2023 consent mechanisms and a Privacy Notice — not optional in India.' },
+    { severity: 'critical', color: '#EF4444', title: 'Terms of Service Missing', text: 'No ToS means zero legal protection against misuse, data disputes, or liability claims from users.' },
+    { severity: 'high', color: '#F97316', title: 'IP Ownership Unclear', text: 'If AI-generated outputs are part of the product, copyright ownership of those outputs is legally ambiguous in India.' },
+    { severity: 'high', color: '#F97316', title: 'Regulatory Filing (Fintech)', text: 'If payments are facilitated, RBI NBFC / Payment Aggregator license may be required. Non-compliance carries heavy penalties.' },
+    { severity: 'medium', color: '#F59E0B', title: 'SaaS Contract Gaps', text: 'B2B SaaS requires NDAs, MSAs, and DPAs with enterprise clients. Absence causes deal friction.' },
+    { severity: 'medium', color: '#F59E0B', title: 'Employment / Contractor Agreements', text: 'Contractors must have IP assignment clauses. Missing clauses create ownership disputes at funding.' },
+];
+
+const COMPLIANCE_INDIA = [
+    { item: 'DPDP Act 2023 — Data Privacy Notice', status: 'missing', risk: 'critical' },
+    { item: 'IT Act 2000 — Cybersecurity Compliance', status: 'partial', risk: 'high' },
+    { item: 'GST Registration (if revenue > ₹20L)', status: 'ok', risk: 'low' },
+    { item: 'Startup India DPIIT Recognition', status: 'ok', risk: 'low' },
+    { item: 'MCA Company / LLP Registration', status: 'ok', risk: 'low' },
+    { item: 'RBI Compliance (if payments involved)', status: 'missing', risk: 'critical' },
+    { item: 'SEBI Compliance (if investor comms)', status: 'partial', risk: 'medium' },
+];
+
+const COMPLIANCE_GLOBAL = [
+    { item: 'GDPR (EU users)', status: 'missing', risk: 'critical' },
+    { item: 'CCPA (California users)', status: 'missing', risk: 'high' },
+    { item: 'SOC 2 Type II (Enterprise SaaS)', status: 'partial', risk: 'medium' },
+    { item: 'ISO 27001 (Data Security)', status: 'missing', risk: 'medium' },
+    { item: 'HIPAA (if health data touched)', status: 'ok', risk: 'low' },
+];
+
+const IP_RISKS = [
+    { area: 'Brand / Trademark', level: 'medium', note: 'Name not trademarked — search + file before scaling.' },
+    { area: 'AI Output Copyright', level: 'high', note: 'Legally ambiguous in India and globally — document policy.' },
+    { area: 'Open Source Licenses', level: 'low', note: 'Dependency audit recommended quarterly.' },
+    { area: 'Trade Secrets / Code', level: 'low', note: 'NDA with all contractors and employees in place.' },
+    { area: 'Domain & Social Handles', level: 'low', note: 'Core domain secured. Social handles registered.' },
+    { area: 'Patent (if novel tech)', level: 'medium', note: 'File provisional patent if core algorithm is novel.' },
+];
+
+const LEGAL_CHECKLIST = [
+    { item: 'Privacy Policy published on website', done: false },
+    { item: 'Terms of Service / Terms of Use', done: false },
+    { item: 'Cookie consent banner implemented', done: false },
+    { item: 'Founder IP assignment agreements', done: true },
+    { item: 'Company incorporation completed', done: true },
+    { item: 'Contractor NDA + IP clauses signed', done: false },
+    { item: 'Data Processing Agreement (DPA) template', done: false },
+    { item: 'DPDP Act consent mechanism built', done: false },
+];
+
+const sevColor = (s: string) => s === 'critical' ? '#EF4444' : s === 'high' ? '#F97316' : s === 'medium' ? '#F59E0B' : '#22C55E';
+const sevBg = (s: string) => s === 'critical' ? 'rgba(239,68,68,0.07)' : s === 'high' ? 'rgba(249,115,22,0.07)' : s === 'medium' ? 'rgba(245,158,11,0.07)' : 'rgba(34,197,94,0.07)';
+const statusIcon = (s: string) => s === 'ok' ? '✅' : s === 'partial' ? '⚠️' : '❌';
 
 const REVENUE_CRITERIA = [
     { label: 'Monetization Clarity', score: 14, max: 20 },
@@ -848,6 +923,323 @@ export default function MarketResearchPage() {
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── Legal & Compliance Agent Card ── */}
+                <div id="legal" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #EF4444', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(239,68,68,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(254,226,226,0.6)', background: 'linear-gradient(135deg, rgba(254,242,242,0.6) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Scale size={20} color="#EF4444" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Legal & Compliance Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"Will this cause legal trouble later?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={38} color="#EF4444" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#EF4444' }}>38</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#EF4444', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>High Legal Risk</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Data Privacy', s: 12, c: '#EF4444' }, { l: 'IP Risk', s: 55, c: '#F97316' }, { l: 'Compliance', s: 40, c: '#F59E0B' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(254,226,226,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center' }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Critical Warning */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderLeft: '3px solid #EF4444', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', display: 'flex', alignItems: 'flex-start', gap: '0.625rem' }}>
+                        <ShieldAlert size={16} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <span style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#7F1D1D' }}>User data collection requires DPDP Act 2023 consent and a Privacy Notice — non-compliance is a critical legal blocker before launch.</span>
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* Legal Risk Flags */}
+                        <div style={{ background: 'rgba(254,242,242,0.4)', border: '1px solid rgba(239,68,68,0.12)', borderRadius: '0.875rem', padding: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.875rem' }}>
+                                <Gavel size={14} color="#EF4444" />
+                                <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Legal Risk Flags</span>
+                                <span style={{ marginLeft: 'auto', background: 'rgba(239,68,68,0.1)', color: '#EF4444', borderRadius: '2rem', padding: '0.1rem 0.625rem', fontSize: '0.7rem', fontWeight: 700 }}>{LEGAL_FLAGS.filter(f => f.severity === 'critical').length} Critical</span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                {LEGAL_FLAGS.map((flag, i) => (
+                                    <div key={i} style={{ background: sevBg(flag.severity), border: `1px solid ${sevColor(flag.severity)}20`, borderLeft: `3px solid ${sevColor(flag.severity)}`, borderRadius: '0 0.625rem 0.625rem 0', padding: '0.75rem 1rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                            <span style={{ background: `${sevColor(flag.severity)}15`, color: sevColor(flag.severity), borderRadius: '2rem', padding: '0.1rem 0.5rem', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase' }}>{flag.severity}</span>
+                                            <span style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: '0.82rem', color: '#1E293B' }}>{flag.title}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.5 }}>{flag.text}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Compliance Checklists */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+
+                            {/* India Compliance */}
+                            <div style={{ background: 'rgba(254,242,242,0.4)', border: '1px solid rgba(239,68,68,0.12)', borderRadius: '0.875rem', overflow: 'hidden' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.875rem 1rem', borderBottom: '1px solid rgba(254,226,226,0.5)', background: 'rgba(254,226,226,0.2)' }}>
+                                    <span style={{ fontSize: '0.9rem' }}>🇮🇳</span>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>India Compliance</span>
+                                </div>
+                                {COMPLIANCE_INDIA.map((row, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.5rem 1rem', background: i % 2 === 0 ? 'rgba(255,255,255,0.3)' : 'transparent', borderBottom: '1px solid rgba(254,226,226,0.3)' }}>
+                                        <span style={{ fontSize: '0.85rem', flexShrink: 0 }}>{statusIcon(row.status)}</span>
+                                        <span style={{ fontSize: '0.78rem', color: '#1E293B', flex: 1, lineHeight: 1.4 }}>{row.item}</span>
+                                        <span style={{ background: `${sevColor(row.risk)}12`, color: sevColor(row.risk), borderRadius: '2rem', padding: '0.08rem 0.45rem', fontSize: '0.62rem', fontWeight: 700, flexShrink: 0 }}>{row.risk}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Global Compliance + IP Risks */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <div style={{ background: 'rgba(254,242,242,0.4)', border: '1px solid rgba(239,68,68,0.12)', borderRadius: '0.875rem', overflow: 'hidden' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.75rem 1rem', borderBottom: '1px solid rgba(254,226,226,0.5)', background: 'rgba(254,226,226,0.2)' }}>
+                                        <Globe size={13} color="#EF4444" />
+                                        <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.82rem', color: '#0B1220' }}>Global Compliance</span>
+                                    </div>
+                                    {COMPLIANCE_GLOBAL.map((row, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.45rem 1rem', background: i % 2 === 0 ? 'rgba(255,255,255,0.3)' : 'transparent', borderBottom: i < COMPLIANCE_GLOBAL.length - 1 ? '1px solid rgba(254,226,226,0.3)' : 'none' }}>
+                                            <span style={{ fontSize: '0.8rem', flexShrink: 0 }}>{statusIcon(row.status)}</span>
+                                            <span style={{ fontSize: '0.75rem', color: '#1E293B', flex: 1, lineHeight: 1.3 }}>{row.item}</span>
+                                            <span style={{ background: `${sevColor(row.risk)}12`, color: sevColor(row.risk), borderRadius: '2rem', padding: '0.06rem 0.4rem', fontSize: '0.6rem', fontWeight: 700, flexShrink: 0 }}>{row.risk}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* IP Risk */}
+                                <div style={{ background: 'rgba(254,242,242,0.4)', border: '1px solid rgba(239,68,68,0.12)', borderRadius: '0.875rem', overflow: 'hidden' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.75rem 1rem', borderBottom: '1px solid rgba(254,226,226,0.5)', background: 'rgba(254,226,226,0.2)' }}>
+                                        <Shield size={13} color="#EF4444" />
+                                        <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.82rem', color: '#0B1220' }}>IP Risk Assessment</span>
+                                    </div>
+                                    {IP_RISKS.map((row, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.45rem 1rem', background: i % 2 === 0 ? 'rgba(255,255,255,0.3)' : 'transparent', borderBottom: i < IP_RISKS.length - 1 ? '1px solid rgba(254,226,226,0.3)' : 'none' }}>
+                                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: sevColor(row.level), flexShrink: 0 }} />
+                                            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#1E293B', minWidth: 130 }}>{row.area}</span>
+                                            <span style={{ fontSize: '0.7rem', color: '#64748B', flex: 1, lineHeight: 1.3 }}>{row.note}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Compliance Checklist + Actions */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+
+                            {/* Legal Checklist */}
+                            <div style={{ background: 'rgba(254,242,242,0.4)', border: '1px solid rgba(239,68,68,0.12)', borderRadius: '0.875rem', padding: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.875rem' }}>
+                                    <FileText size={14} color="#EF4444" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Legal Compliance Checklist</span>
+                                    <span style={{ marginLeft: 'auto', fontFamily: 'monospace', fontWeight: 700, fontSize: '0.8rem', color: '#EF4444' }}>{LEGAL_CHECKLIST.filter(i => i.done).length}/{LEGAL_CHECKLIST.length}</span>
+                                </div>
+                                <div style={{ height: 6, background: '#E2E8F0', borderRadius: 3, marginBottom: '0.75rem' }}>
+                                    <div style={{ width: `${(LEGAL_CHECKLIST.filter(i => i.done).length / LEGAL_CHECKLIST.length) * 100}%`, height: '100%', borderRadius: 3, background: 'linear-gradient(90deg,#EF4444,#F97316)' }} />
+                                </div>
+                                {LEGAL_CHECKLIST.map((item, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.45rem 0', borderBottom: i < LEGAL_CHECKLIST.length - 1 ? '1px solid rgba(254,226,226,0.4)' : 'none' }}>
+                                        {item.done
+                                            ? <CheckCircle size={14} color="#22C55E" style={{ flexShrink: 0 }} />
+                                            : <XCircle size={14} color="#EF4444" style={{ flexShrink: 0 }} />}
+                                        <span style={{ fontSize: '0.8rem', color: item.done ? '#16A34A' : '#1E293B', textDecoration: item.done ? 'line-through' : 'none', opacity: item.done ? 0.7 : 1 }}>{item.item}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Priority Actions */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '0.875rem', padding: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.875rem' }}>
+                                    <Eye size={14} color="#EF4444" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Priority Legal Actions</span>
+                                </div>
+                                {[
+                                    { pri: 'Do Now', c: '#EF4444', bg: 'rgba(239,68,68,0.12)', title: 'Draft and publish Privacy Policy + Terms of Service', impact: 'Removes biggest legal liability' },
+                                    { pri: 'Do Now', c: '#EF4444', bg: 'rgba(239,68,68,0.12)', title: 'Implement DPDP Act 2023 consent banner', impact: 'Mandatory for Indian users' },
+                                    { pri: 'This Week', c: '#F97316', bg: 'rgba(249,115,22,0.12)', title: 'Draft contractor NDA with IP assignment clause', impact: 'Protects IP at funding' },
+                                    { pri: 'This Week', c: '#F97316', bg: 'rgba(249,115,22,0.12)', title: 'File trademark application for brand name', impact: 'Prevents brand conflicts at scale' },
+                                    { pri: 'Next Sprint', c: '#F59E0B', bg: 'rgba(245,158,11,0.1)', title: 'Conduct open-source license audit on all dependencies', impact: 'Avoids GPL copyleft traps' },
+                                    { pri: 'Next Sprint', c: '#F59E0B', bg: 'rgba(245,158,11,0.1)', title: 'Prepare GDPR-ready consent flows for EU expansion', impact: 'Required before global launch' },
+                                ].map((a, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.625rem', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '0.5rem', padding: '0.6rem 0.75rem', marginBottom: '0.45rem' }}>
+                                        <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(239,68,68,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Sora', fontWeight: 700, fontSize: '0.7rem', color: '#EF4444', flexShrink: 0 }}>{i + 1}</div>
+                                        <div style={{ flex: 1 }}>
+                                            <span style={{ background: a.bg, color: a.c, borderRadius: '2rem', padding: '0.08rem 0.5rem', fontSize: '0.65rem', fontWeight: 600 }}>{a.pri}</span>
+                                            <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#E2E8F0', marginTop: '0.2rem', lineHeight: 1.35 }}>{a.title}</div>
+                                            <div style={{ fontSize: '0.7rem', color: '#22C55E' }}>↑ {a.impact}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── GTM Strategy Agent Card ── */}
+                <div id="gtm" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #8B5CF6', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(139,92,246,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(23ede9,233,245,0.6)', background: 'linear-gradient(135deg, rgba(2ede3,233,243,0.6) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(139,92,246,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Target size={20} color="#8B5CF6" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Go-To-Market Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"How will this startup acquire customers?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={82} color="#8B5CF6" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#8B5CF6' }}>82</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.25)', color: '#8B5CF6', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>Strong GTM Fit</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Channels', s: 85, c: '#8B5CF6' }, { l: 'Unit Economics', s: 90, c: '#10B981' }, { l: 'Virality', s: 72, c: '#F59E0B' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(237,233,254,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center' }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(139,92,246,0.07)', border: '1px solid rgba(139,92,246,0.18)', borderLeft: '3px solid #8B5CF6', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "PLG (Product-Led Growth) combined with SEO is the strongest acquisition path. Avoid paid ads early due to low initial LTV."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* Unit Economics + Distribution */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '1.25rem' }}>
+
+                            {/* CAC / Unit Economics */}
+                            <div style={{ background: 'rgba(237,233,254,0.4)', border: '1px solid rgba(139,92,246,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Calculator size={14} color="#8B5CF6" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>CAC & Unit Economics</span>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.625rem', marginBottom: '1rem' }}>
+                                    {CAC_METRICS.slice(0, 2).map((m, i) => (
+                                        <div key={i} style={{ background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.5)', borderRadius: '0.5rem', padding: '0.75rem', textAlign: 'center' }}>
+                                            <div style={{ fontSize: '0.65rem', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.2rem' }}>{m.label}</div>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.1rem', color: '#0B1220' }}>{m.value}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                {CAC_METRICS.slice(2).map((m, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.625rem 0', borderTop: '1px solid rgba(139,92,246,0.15)' }}>
+                                        <div>
+                                            <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1E293B' }}>{m.label}</div>
+                                            <div style={{ fontSize: '0.65rem', color: '#64748B' }}>{m.note}</div>
+                                        </div>
+                                        <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1rem', color: m.status === 'optimal' ? '#10B981' : '#F59E0B' }}>{m.value}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Channel Feasibility */}
+                            <div style={{ background: 'rgba(255,255,255,0.4)', border: '1px solid rgba(139,92,246,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Megaphone size={14} color="#8B5CF6" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Distribution Channels</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                                    {CHANNELS.map((ch, i) => {
+                                        const Icon = ch.icon;
+                                        return (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', padding: '0.625rem', background: gtmBg(ch.score), border: `1px solid ${gtmColor(ch.score)}20`, borderRadius: '0.625rem' }}>
+                                                <div style={{ width: 32, height: 32, borderRadius: '0.5rem', background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon size={16} color={gtmColor(ch.score)} /></div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+                                                        <span style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: '0.8rem', color: '#0B1220' }}>{ch.name}</span>
+                                                        <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.75rem', color: gtmColor(ch.score) }}>{ch.score}/100</span>
+                                                    </div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                        <span style={{ fontSize: '0.65rem', color: '#64748B', background: 'rgba(255,255,255,0.5)', padding: '0.1rem 0.4rem', borderRadius: 4 }}>{ch.cost}</span>
+                                                        <span style={{ fontSize: '0.65rem', color: '#64748B', background: 'rgba(255,255,255,0.5)', padding: '0.1rem 0.4rem', borderRadius: 4 }}>{ch.speed}</span>
+                                                        <span style={{ fontSize: '0.68rem', color: '#475569', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>— {ch.note}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Sales Complexity + Roadmap */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.25rem' }}>
+
+                            {/* Sales Complexity */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(139,92,246,0.3)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Activity size={14} color="#8B5CF6" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Sales Complexity</span>
+                                </div>
+                                <div style={{ textAlign: 'center', padding: '1rem 0', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.5rem' }}>
+                                    <div style={{ fontSize: '0.75rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sales Motion</div>
+                                    <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.25rem', color: '#8B5CF6' }}>Self-Serve / PLG</div>
+                                    <div style={{ height: 1, background: 'rgba(255,255,255,0.1)', margin: '0.5rem 0' }} />
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                        <span style={{ color: '#94A3B8' }}>Sales Cycle:</span>
+                                        <span style={{ color: '#E2E8F0', fontWeight: 600 }}>1 - 7 Days</span>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                        <span style={{ color: '#94A3B8' }}>Decision Maker:</span>
+                                        <span style={{ color: '#E2E8F0', fontWeight: 600 }}>End User (B2C)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Acquisition Roadmap */}
+                            <div style={{ background: 'rgba(237,233,254,0.4)', border: '1px solid rgba(139,92,246,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Target size={14} color="#8B5CF6" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Customer Acquisition Roadmap</span>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.875rem' }}>
+                                    {GTM_PHASES.map((phase, i) => (
+                                        <div key={i} style={{ background: 'rgba(255,255,255,0.6)', border: `1px solid rgba(139,92,246,0.2)`, borderTop: `3px solid #8B5CF6`, borderRadius: '0.625rem', padding: '0.875rem' }}>
+                                            <div style={{ fontSize: '0.65rem', color: '#8B5CF6', fontWeight: 700, marginBottom: '0.2rem' }}>{phase.phase}</div>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220', marginBottom: '0.5rem' }}>{phase.title}</div>
+                                            <div style={{ background: 'rgba(139,92,246,0.1)', color: '#6D28D9', fontSize: '0.7rem', fontWeight: 600, padding: '0.2rem 0.5rem', borderRadius: 4, display: 'inline-block', marginBottom: '0.75rem' }}>Target: {phase.target}</div>
+                                            <ul style={{ margin: 0, paddingLeft: '1rem', color: '#475569', fontSize: '0.72rem', display: 'flex', flexDirection: 'column', gap: '0.3rem', marginBottom: '0.75rem' }}>
+                                                {phase.actions.map((act, j) => <li key={j}>{act}</li>)}
+                                            </ul>
+                                            <div style={{ fontSize: '0.65rem', color: '#94A3B8', borderTop: '1px solid rgba(139,92,246,0.15)', paddingTop: '0.5rem' }}>Key Metric: <span style={{ color: '#0B1220', fontWeight: 600 }}>{phase.metric}</span></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
