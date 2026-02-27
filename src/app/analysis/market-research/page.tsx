@@ -1,5 +1,111 @@
 'use client';
-import { BarChart2, Cpu, Banknote, Scale, Target, Calculator, Server, Leaf, Package, Database, CheckCircle, TrendingUp, Zap, Brain, RefreshCw, Download, Rocket, Activity, Users, Globe, AlertTriangle, Shield, Monitor, Lock, Layers, GitBranch, XCircle, Info, Star, Building2, ThumbsUp, ThumbsDown, ArrowRight, Map, FileText, Gavel, Eye, ShieldAlert, Megaphone, Share2, MousePointerClick, MessageSquare, Search, PenTool, ShoppingCart } from 'lucide-react';
+import { BarChart2, Cpu, Banknote, Scale, Target, Calculator, Server, Leaf, Package, Database, CheckCircle, TrendingUp, Zap, Brain, RefreshCw, Download, Rocket, Activity, Users, Globe, AlertTriangle, Shield, Monitor, Lock, Layers, GitBranch, XCircle, Info, Star, Building2, ThumbsUp, ThumbsDown, ArrowRight, Map, FileText, Gavel, Eye, ShieldAlert, Megaphone, Share2, MousePointerClick, MessageSquare, Search, PenTool, ShoppingCart, DollarSign, PieChart, Coins, Network, HardDrive, Cpu as CpuIcon, TreePine, Droplets, Sun, Wind, Recycle, Fingerprint, Bug, LockKeyhole, Truck, Clock, MapPin } from 'lucide-react';
+
+const SUPPLY_CHAIN_RISKS = [
+    { area: 'Supplier Concentration', risk: 'High', note: '80% of raw materials rely on a single vendor in Shenzhen.', color: '#EF4444' },
+    { area: 'Lead Time Volatility', risk: 'Medium', note: 'Average 45-day ocean freight. Vulnerable to port strikes.', color: '#F59E0B' },
+    { area: 'Inventory Holding', risk: 'Low', note: 'Just-in-time approach working well currently.', color: '#10B981' },
+];
+
+const WORKING_CAPITAL = [
+    { metric: 'Days Sales Outstanding (DSO)', value: '32 Days', target: '< 45', status: 'optimal' },
+    { metric: 'Days Inventory Outstanding (DIO)', value: '85 Days', target: '< 60', status: 'warning' },
+    { metric: 'Days Payable Outstanding (DPO)', value: '45 Days', target: '> 60', status: 'warning' },
+];
+
+const LOGISTICS_SPEED = [
+    { step: 'Order Processing', time: '12 hrs', rating: 'Fast' },
+    { step: 'Fulfillment & Pack', time: '24 hrs', rating: 'Average' },
+    { step: 'Last Mile Delivery', time: '3-4 Days', rating: 'Slow' },
+];
+
+const scColor = (risk: string) => risk === 'High' ? '#EF4444' : risk === 'Medium' ? '#F59E0B' : '#10B981';
+const scBg = (risk: string) => risk === 'High' ? 'rgba(239,68,68,0.1)' : risk === 'Medium' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)';
+
+const AI_RISKS = [
+    { risk: 'Hallucination Severity', level: 'High', impact: 'Clinical outputs cannot be trusted without human-in-the-loop review.', icon: Bug, color: '#EF4444' },
+    { risk: 'Data Privacy (PII)', level: 'Critical', impact: 'User prompts may contain sensitive health data sent to 3rd party APIs.', icon: LockKeyhole, color: '#EF4444' },
+    { risk: 'Algorithmic Bias', level: 'Medium', impact: 'Training data skews towards western demographics, reducing accuracy in Asia/Africa.', icon: Scale, color: '#F59E0B' },
+];
+
+const DATA_MOAT = [
+    { asset: 'Proprietary Dataset', score: 30, note: 'Weak. Relying mostly on public internet data.' },
+    { asset: 'User Data Flywheel', score: 75, note: 'Strong. System learns and improves from every expert interaction.' },
+    { asset: 'Custom Fine-Tuning', score: 20, note: 'None yet. Standard base model wrappers used.' },
+];
+
+const MODEL_DEPENDENCY = [
+    { provider: 'OpenAI (GPT-4)', usage: '85%', risk: 'Vendor Lock-in', backup: 'Minimal' },
+    { provider: 'Anthropic (Claude 3)', usage: '10%', risk: 'Rate Limits', backup: 'Fallback only' },
+    { provider: 'Local/Open Source (Llama)', usage: '5%', risk: 'High Latency', backup: 'Experimental' },
+];
+
+const aiRiskColor = (level: string) => level === 'Critical' || level === 'High' ? '#EF4444' : level === 'Medium' ? '#F59E0B' : '#10B981';
+const aiRiskBg = (level: string) => level === 'Critical' || level === 'High' ? 'rgba(239,68,68,0.1)' : level === 'Medium' ? 'rgba(245,158,11,0.1)' : 'rgba(16,185,129,0.1)';
+
+const ESG_METRICS = [
+    { category: 'Environmental', score: 85, icon: TreePine, color: '#10B981', details: 'Zero-emission cloud infrastructure. 100% renewable energy.' },
+    { category: 'Social', score: 72, icon: Users, color: '#3B82F6', details: 'Strong diversity hiring policy. Fair wages for data labelers.' },
+    { category: 'Governance', score: 90, icon: Shield, color: '#8B5CF6', details: 'Transparent data policies. Independent board members.' },
+];
+
+const SDG_ALIGNMENT = [
+    { id: 'SDG 9', title: 'Industry, Innovation & Infrastructure', impact: 'Direct', relevance: 'High' },
+    { id: 'SDG 8', title: 'Decent Work & Economic Growth', impact: 'Indirect', relevance: 'Medium' },
+    { id: 'SDG 12', title: 'Responsible Consumption', impact: 'Indirect', relevance: 'Low' },
+];
+
+const IMPACT_KPI = [
+    { metric: 'Carbon Avoided', value: '450 Tons/yr', target: '500 Tons', status: 'on-track' },
+    { metric: 'Jobs Created', value: '120 Local', target: '100 Local', status: 'exceeded' },
+    { metric: 'Waste Reduced', value: '15%', target: '20%', status: 'lagging' },
+];
+
+const esgColor = (score: number) => score >= 80 ? '#10B981' : score >= 60 ? '#3B82F6' : '#EF4444';
+const esgBg = (score: number) => score >= 80 ? 'rgba(16,185,129,0.1)' : score >= 60 ? 'rgba(59,130,246,0.1)' : 'rgba(239,68,68,0.1)';
+
+const INFRA_SCALING = [
+    { area: 'Database Architecture', status: 'ready', note: 'Supabase scales easily to 100k+ MAU.', icon: Database },
+    { area: 'API Rate Limits (LLM)', status: 'warning', note: 'Anthropic Tier 2 limits will hit at 5k daily active users.', icon: CpuIcon },
+    { area: 'Frontend CDN', status: 'ready', note: 'Vercel Edge network handles global traffic spikes.', icon: Globe },
+    { area: 'Real-time WebSocket', status: 'danger', note: 'Current polling architecture will crash under heavy load.', icon: Zap },
+];
+
+const OPS_BOTTLENECKS = [
+    { process: 'Customer Onboarding', type: 'Manual', time: '4 hrs/client', scale_limit: '50/month', impact: 'High' },
+    { process: 'Data Annotation', type: 'Hybrid', time: '1 hr/dataset', scale_limit: '200/month', impact: 'Medium' },
+    { process: 'Support Ticket Prep', type: 'Automated', time: 'Instant', scale_limit: 'Unlimited', impact: 'Low' },
+];
+
+const DEPENDENCIES = [
+    { name: 'Anthropic Claude API', risk: 'High', reason: 'Core product value relies entirely on a single AI provider.' },
+    { name: 'Stripe Billing', risk: 'Low', reason: 'Industry standard, easy to migrate if absolutely necessary.' },
+    { name: 'AWS S3 Storage', risk: 'Low', reason: 'Commoditized storage, virtually infinite scale.' },
+];
+
+const scaColor = (status: string) => status === 'ready' ? '#10B981' : status === 'warning' ? '#F59E0B' : '#EF4444';
+const scaBg = (status: string) => status === 'ready' ? 'rgba(16,185,129,0.1)' : status === 'warning' ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)';
+
+const UNIT_ECONOMICS = [
+    { metric: 'Avg Revenue Per User (ARPU)', value: '₹2,500/mo', benchmark: 'Healthy', color: '#10B981' },
+    { metric: 'Cost of Goods Sold (COGS)', value: '₹400/mo', benchmark: 'Server/LLM costs', color: '#64748B' },
+    { metric: 'Gross Margin', value: '84%', benchmark: 'Target > 80%', color: '#10B981' },
+];
+
+const CAP_EFFICIENCY = [
+    { label: 'Months of Runway', value: '14 Months', status: 'warning', note: 'Based on current burn rate' },
+    { label: 'Burn Multiple', value: '1.2x', status: 'optimal', note: 'Highly efficient growth' },
+    { label: 'Revenue/Employee', value: '₹44L', status: 'optimal', note: 'Above industry average' },
+];
+
+const PROFIT_TIMELINE = [
+    { quarter: 'Q3 2025', phase: 'Trough of Sorrow', rev: '₹4L', cost: '₹12L', flow: '-₹8L' },
+    { quarter: 'Q4 2025', phase: 'Growth Phase', rev: '₹15L', cost: '₹18L', flow: '-₹3L' },
+    { quarter: 'Q1 2026', phase: 'Break Even Target', rev: '₹25L', cost: '₹22L', flow: '+₹3L' },
+];
+
+const ueColor = (v: number) => v >= 80 ? '#10B981' : v >= 60 ? '#F59E0B' : '#EF4444';
+const ueBg = (v: number) => v >= 80 ? 'rgba(16,185,129,0.1)' : v >= 60 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)';
 
 const CHANNELS = [
     { name: 'SEO & Content', icon: Search, score: 85, cost: 'Low CAC', speed: 'Slow', fit: 'High', note: 'Strong long-term moat for SaaS.' },
@@ -1240,6 +1346,633 @@ export default function MarketResearchPage() {
                                 </div>
                             </div>
 
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── Unit Economics & Financial Modeling Agent Card ── */}
+                <div id="unit-economics" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #10B981', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(16,185,129,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(209,250,229,0.6)', background: 'linear-gradient(135deg, rgba(209,250,229,0.5) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(16,185,129,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><DollarSign size={20} color="#10B981" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Unit Economics Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"Does this business make financial sense?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={88} color="#10B981" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#10B981' }}>88</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.25)', color: '#10B981', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>Highly Sustainable</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Gross Margin', s: 92, c: '#10B981' }, { l: 'LTV/CAC', s: 85, c: '#10B981' }, { l: 'Burn Rate', s: 78, c: '#F59E0B' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(209,250,229,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center' }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(16,185,129,0.07)', border: '1px solid rgba(16,185,129,0.18)', borderLeft: '3px solid #10B981', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "Unit economics are VC-grade. 84% gross margins allow for aggressive growth spending. Break-even path is clear within 12 months."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* Pricing vs Cost Structure & Capital Efficiency */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.25rem' }}>
+
+                            {/* Pricing vs Cost Structure */}
+                            <div style={{ background: 'rgba(236,253,245,0.4)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <PieChart size={14} color="#10B981" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Pricing vs Cost Structure</span>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
+                                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center' }}>
+                                        <div style={{ fontSize: '0.7rem', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.3rem' }}>COGS Engine</div>
+                                        <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.25rem', color: '#0B1220' }}>16%</div>
+                                        <div style={{ fontSize: '0.65rem', color: '#475569', marginTop: '0.2rem' }}>Hosting & APIs</div>
+                                    </div>
+                                    <div style={{ width: 1, height: 40, background: 'rgba(16,185,129,0.2)' }} />
+                                    <div style={{ flex: 1, background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center' }}>
+                                        <div style={{ fontSize: '0.7rem', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Gross Margin</div>
+                                        <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.25rem', color: '#10B981' }}>84%</div>
+                                        <div style={{ fontSize: '0.65rem', color: '#10B981', marginTop: '0.2rem' }}>VC Target: &gt;80%</div>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                    {UNIT_ECONOMICS.map((u, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0', borderTop: i === 0 ? 'none' : '1px solid rgba(16,185,129,0.1)' }}>
+                                            <div>
+                                                <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#1E293B' }}>{u.metric}</div>
+                                                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>{u.benchmark}</div>
+                                            </div>
+                                            <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: u.color }}>{u.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Capital Efficiency / Burn */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Coins size={14} color="#10B981" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Burn & Capital Efficiency</span>
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+                                    <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '0.625rem', padding: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                        <div style={{ fontSize: '0.7rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Monthly Burn Rate</div>
+                                        <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.5rem', color: '#F59E0B', margin: '0.25rem 0' }}>₹4.2L / mo</div>
+                                        <div style={{ fontSize: '0.7rem', color: '#CBD5E1' }}>Primarily founders' draw & servers</div>
+                                    </div>
+                                    {CAP_EFFICIENCY.map((c, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.2rem 0' }}>
+                                            <div>
+                                                <div style={{ fontSize: '0.78rem', color: '#E2E8F0' }}>{c.label}</div>
+                                                <div style={{ fontSize: '0.65rem', color: '#64748B' }}>{c.note}</div>
+                                            </div>
+                                            <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: c.status === 'optimal' ? '#10B981' : '#F59E0B' }}>{c.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Profitability Timeline */}
+                        <div style={{ background: 'rgba(236,253,245,0.3)', border: '1px solid rgba(16,185,129,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                    <BarChart2 size={14} color="#10B981" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Profitability Timeline & Break-Even</span>
+                                </div>
+                                <div style={{ background: 'rgba(16,185,129,0.1)', color: '#10B981', borderRadius: '2rem', padding: '0.2rem 0.6rem', fontSize: '0.7rem', fontWeight: 700 }}>Target: Q1 2026</div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1.5rem' }}>
+                                {PROFIT_TIMELINE.map((p, i) => (
+                                    <div key={i} style={{ position: 'relative', background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(16,185,129,0.15)', borderTop: `3px solid ${p.flow.startsWith('+') ? '#10B981' : '#F59E0B'}`, borderRadius: '0.75rem', padding: '1.25rem 1rem 1rem' }}>
+                                        <div style={{ position: 'absolute', top: -12, left: 16, background: '#0F1A2E', color: '#E2E8F0', padding: '0.2rem 0.6rem', borderRadius: 4, fontFamily: 'monospace', fontWeight: 700, fontSize: '0.7rem' }}>{p.quarter}</div>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569', marginBottom: '1rem' }}>{p.phase}</div>
+
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                                <span style={{ color: '#64748B' }}>Revenue</span>
+                                                <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#0B1220' }}>{p.rev}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                                <span style={{ color: '#64748B' }}>Fixed Costs</span>
+                                                <span style={{ fontFamily: 'monospace', fontWeight: 600, color: '#EF4444' }}>{p.cost}</span>
+                                            </div>
+                                            <div style={{ height: 1, background: 'rgba(16,185,129,0.15)', margin: '0.2rem 0' }} />
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                                                <span style={{ color: '#0B1220', fontWeight: 600 }}>Net Cash Flow</span>
+                                                <span style={{ fontFamily: 'Sora', fontWeight: 700, color: p.flow.startsWith('+') ? '#10B981' : '#F59E0B' }}>{p.flow}</span>
+                                            </div>
+                                        </div>
+
+                                        {i < PROFIT_TIMELINE.length - 1 && (
+                                            <ArrowRight size={16} color="#94A3B8" style={{ position: 'absolute', right: -16, top: '50%', transform: 'translateY(-50%)', zIndex: 10 }} />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── Scalability & Infrastructure Agent Card ── */}
+                <div id="scalability" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #6366F1', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(99,102,241,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(224,231,255,0.6)', background: 'linear-gradient(135deg, rgba(224,231,255,0.5) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(99,102,241,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Network size={20} color="#6366F1" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Scalability Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"Can this scale to 10x or 100x?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={64} color="#6366F1" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#6366F1' }}>64</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.25)', color: '#D97706', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>Ops Bottlenecked</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Tech Infra', s: 85, c: '#10B981' }, { l: 'Operations', s: 42, c: '#EF4444' }, { l: 'Dependencies', s: 65, c: '#F59E0B' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(224,231,255,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center' }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(99,102,241,0.07)', border: '1px solid rgba(99,102,241,0.18)', borderLeft: '3px solid #6366F1', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "Codebase and servers will handle 10x growth easily, but manual customer onboarding processes will break long before that."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* Scale Limits mapping */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+
+                            {/* Technical Infrastructure */}
+                            <div style={{ background: 'rgba(238,242,255,0.4)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                        <Server size={14} color="#6366F1" />
+                                        <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Infrastructure Scale Profile</span>
+                                    </div>
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10B981' }}>10x Ready</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                                    {INFRA_SCALING.map((item, i) => {
+                                        const Icon = item.icon;
+                                        return (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: 'rgba(255,255,255,0.6)', border: `1px solid ${scaColor(item.status)}30`, borderRadius: '0.625rem' }}>
+                                                <div style={{ background: scaBg(item.status), borderRadius: '0.3rem', padding: '0.3rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                    <Icon size={14} color={scaColor(item.status)} />
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
+                                                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#1E293B' }}>{item.area}</span>
+                                                        {item.status === 'danger' && <span style={{ background: '#FEF2F2', color: '#EF4444', fontSize: '0.6rem', padding: '0.1rem 0.3rem', borderRadius: 4, fontWeight: 600 }}>Action Required</span>}
+                                                    </div>
+                                                    <div style={{ fontSize: '0.7rem', color: '#64748B', lineHeight: 1.3 }}>{item.note}</div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Operations Bottlenecks */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                        <Users size={14} color="#818CF8" />
+                                        <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Operational Bottlenecks</span>
+                                    </div>
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#EF4444' }}>High Friction</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                                    {OPS_BOTTLENECKS.map((op, i) => (
+                                        <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.5rem', padding: '0.75rem' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
+                                                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#E2E8F0' }}>{op.process}</span>
+                                                <span style={{ background: op.type === 'Manual' ? 'rgba(239,68,68,0.2)' : op.type === 'Hybrid' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)', color: op.type === 'Manual' ? '#FCA5A5' : op.type === 'Hybrid' ? '#FCD34D' : '#6EE7B7', fontSize: '0.65rem', padding: '0.1rem 0.4rem', borderRadius: 4, fontWeight: 600 }}>{op.type}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#94A3B8' }}>
+                                                <span>Cost: {op.time}</span>
+                                                <span style={{ color: op.scale_limit === 'Unlimited' ? '#6EE7B7' : '#FCA5A5' }}>Cap: {op.scale_limit}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div style={{ marginTop: '1rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '0.5rem', padding: '0.6rem', fontSize: '0.75rem', color: '#FCA5A5', display: 'flex', gap: '0.5rem' }}>
+                                    <AlertTriangle size={14} style={{ flexShrink: 0, marginTop: 2 }} />
+                                    <span>Manual onboarding requires a self-serve flow before reaching 100 users/mo, otherwise growth will physically halt.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Dependency Risks */}
+                        <div style={{ background: 'rgba(238,242,255,0.3)', border: '1px solid rgba(99,102,241,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                <Layers size={14} color="#6366F1" />
+                                <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Third-Party Dependency Risk</span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                                {DEPENDENCIES.map((dep, i) => (
+                                    <div key={i} style={{ background: 'rgba(255,255,255,0.8)', border: `1px solid ${dep.risk === 'High' ? 'rgba(239,68,68,0.3)' : 'rgba(226,232,240,0.8)'}`, borderTop: `3px solid ${dep.risk === 'High' ? '#EF4444' : '#CBD5E1'}`, borderRadius: '0.625rem', padding: '1rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0B1220' }}>{dep.name}</span>
+                                            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: dep.risk === 'High' ? '#EF4444' : '#64748B', background: dep.risk === 'High' ? 'rgba(239,68,68,0.1)' : 'rgba(241,245,249,1)', padding: '0.15rem 0.5rem', borderRadius: 4 }}>{dep.risk} Risk</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.72rem', color: '#475569', lineHeight: 1.4 }}>{dep.reason}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── Impact & Sustainability Agent Card ── */}
+                <div id="impact" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #059669', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(5,150,105,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(167,243,208,0.6)', background: 'linear-gradient(135deg, rgba(167,243,208,0.5) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(5,150,105,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Leaf size={20} color="#059669" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Impact & Sustainability Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"What is the ESG impact and social benefit?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={82} color="#059669" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#059669' }}>82</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(5,150,105,0.1)', border: '1px solid rgba(5,150,105,0.25)', color: '#059669', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>Strong ESG Profile</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Env', s: 85, c: '#10B981' }, { l: 'Social', s: 72, c: '#3B82F6' }, { l: 'Gov', s: 90, c: '#8B5CF6' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(167,243,208,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center', minWidth: 45 }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(5,150,105,0.07)', border: '1px solid rgba(5,150,105,0.18)', borderLeft: '3px solid #059669', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "Highly aligned with sustainable innovation goals. Strong governance practices and measurable environmental benefits make it attractive to impact investors."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* ESG Scorecard + KPIs */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.25rem' }}>
+
+                            {/* ESG Pillars */}
+                            <div style={{ background: 'rgba(236,253,245,0.4)', border: '1px solid rgba(5,150,105,0.15)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Scale size={14} color="#059669" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>ESG Pillars</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {ESG_METRICS.map((esg, i) => {
+                                        const Icon = esg.icon;
+                                        return (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.875rem', background: 'rgba(255,255,255,0.7)', border: `1px solid ${esgColor(esg.score)}30`, borderRadius: '0.75rem' }}>
+                                                <div style={{ background: esgBg(esg.score), borderRadius: '0.5rem', padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Icon size={18} color={esgColor(esg.score)} />
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
+                                                        <span style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: '0.85rem', color: '#0B1220' }}>{esg.category}</span>
+                                                        <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.8rem', color: esgColor(esg.score) }}>{esg.score}/100</span>
+                                                    </div>
+                                                    <div style={{ fontSize: '0.7rem', color: '#64748B' }}>{esg.details}</div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Impact KPIs */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(5,150,105,0.3)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Activity size={14} color="#10B981" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Real-World Impact KPIs</span>
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.875rem' }}>
+                                    {IMPACT_KPI.map((kpi, i) => (
+                                        <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.625rem', padding: '0.875rem' }}>
+                                            <div style={{ fontSize: '0.7rem', color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.3rem' }}>{kpi.metric}</div>
+                                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                                                <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.25rem', color: kpi.status === 'exceeded' || kpi.status === 'on-track' ? '#10B981' : '#F59E0B' }}>{kpi.value}</span>
+                                                <span style={{ fontSize: '0.65rem', color: '#64748B' }}>/ {kpi.target} target</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* SDG Alignment */}
+                        <div style={{ background: 'rgba(236,253,245,0.3)', border: '1px solid rgba(5,150,105,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                <Target size={14} color="#059669" />
+                                <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>UN Sustainable Development Goals (SDG) Alignment</span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                                {SDG_ALIGNMENT.map((sdg, i) => (
+                                    <div key={i} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(167,243,208,0.8)', borderTop: `3px solid #059669`, borderRadius: '0.625rem', padding: '1rem' }}>
+                                        <div style={{ background: 'rgba(5,150,105,0.1)', color: '#059669', fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: 4, display: 'inline-block', marginBottom: '0.5rem' }}>{sdg.id}</div>
+                                        <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#0B1220', marginBottom: '0.75rem', height: 36 }}>{sdg.title}</div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid rgba(5,150,105,0.15)', paddingTop: '0.5rem', fontSize: '0.7rem' }}>
+                                            <span style={{ color: '#64748B' }}>Impact: <span style={{ color: '#0B1220', fontWeight: 600 }}>{sdg.impact}</span></span>
+                                            <span style={{ color: '#64748B' }}>Rel: <span style={{ color: '#059669', fontWeight: 600 }}>{sdg.relevance}</span></span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                {/* ── Supply Chain & Operations Agent Card ── */}
+                <div id="supply-chain" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #D97706', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(217,119,6,0.08)', overflow: 'hidden', marginBottom: '1.25rem' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(253,230,138,0.6)', background: 'linear-gradient(135deg, rgba(253,230,138,0.5) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(217,119,6,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Truck size={20} color="#D97706" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Supply Chain & Operations Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"Can they deliver this consistently?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={58} color="#D97706" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#D97706' }}>58</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(217,119,6,0.1)', border: '1px solid rgba(217,119,6,0.25)', color: '#D97706', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>Fragile Supply Line</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Logistics', s: 65, c: '#F59E0B' }, { l: 'Suppliers', s: 40, c: '#EF4444' }, { l: 'Cash Cycle', s: 70, c: '#3B82F6' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(253,230,138,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center', minWidth: 45 }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(217,119,6,0.07)', border: '1px solid rgba(217,119,6,0.18)', borderLeft: '3px solid #D97706', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "High supplier concentration risk (80% reliant on 1 vendor). Cash cycle is healthy, but working capital is tied up in slow-moving inventory."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+
+                            {/* Supplier & Inventory Risk */}
+                            <div style={{ background: 'rgba(254,243,199,0.4)', border: '1px solid rgba(245,158,11,0.15)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Package size={14} color="#D97706" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Supplier & Inventory Risk</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {SUPPLY_CHAIN_RISKS.map((risk, i) => (
+                                        <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.875rem', background: 'rgba(255,255,255,0.7)', border: `1px solid ${scColor(risk.risk)}30`, borderRadius: '0.75rem' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.3rem' }}>
+                                                    <span style={{ fontFamily: 'Sora', fontWeight: 600, fontSize: '0.85rem', color: '#0B1220' }}>{risk.area}</span>
+                                                    <span style={{ fontSize: '0.65rem', fontWeight: 700, color: scColor(risk.risk), background: scBg(risk.risk), padding: '0.15rem 0.5rem', borderRadius: 4 }}>{risk.risk}</span>
+                                                </div>
+                                                <div style={{ fontSize: '0.7rem', color: '#475569', lineHeight: 1.4 }}>{risk.note}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Working Capital & Cycle */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <RefreshCw size={14} color="#FBBF24" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Cash Conversion Cycle (CCC)</span>
+                                </div>
+                                <div style={{ textAlign: 'center', marginBottom: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: '0.625rem', padding: '0.875rem' }}>
+                                    <div style={{ fontSize: '0.7rem', color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Net Cycle Time</div>
+                                    <div style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.25rem', color: '#FBBF24' }}>72 Days</div>
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.5rem' }}>
+                                    {WORKING_CAPITAL.map((wc, i) => (
+                                        <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.4rem 0', borderBottom: i === 2 ? 'none' : '1px solid rgba(255,255,255,0.1)' }}>
+                                            <span style={{ fontSize: '0.75rem', color: '#E2E8F0' }}>{wc.metric}</span>
+                                            <div style={{ textAlign: 'right' }}>
+                                                <div style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.85rem', color: wc.status === 'optimal' ? '#10B981' : '#F59E0B' }}>{wc.value}</div>
+                                                <div style={{ fontSize: '0.6rem', color: '#64748B' }}>{wc.target}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Logistics Speed */}
+                        <div style={{ background: 'rgba(254,243,199,0.3)', border: '1px solid rgba(245,158,11,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                <Clock size={14} color="#D97706" />
+                                <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Logistics & Lead Time Analysis</span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                                {LOGISTICS_SPEED.map((log, i) => (
+                                    <div key={i} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(253,230,138,0.8)', borderTop: `3px solid ${log.rating === 'Fast' ? '#10B981' : log.rating === 'Average' ? '#F59E0B' : '#EF4444'}`, borderRadius: '0.625rem', padding: '1rem' }}>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#475569', marginBottom: '0.5rem' }}>{log.step}</div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                            <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.1rem', color: '#0B1220' }}>{log.time}</span>
+                                            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: log.rating === 'Fast' ? '#10B981' : log.rating === 'Average' ? '#F59E0B' : '#EF4444' }}>{log.rating}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {/* ── Data & AI Risk Agent Card ── */}
+                <div id="data-ai-risk" style={{ background: 'rgba(255,255,255,0.62)', backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.78)', borderTop: '3px solid #F59E0B', borderRadius: '1.25rem', boxShadow: '0 8px 32px rgba(245,158,11,0.08)', overflow: 'hidden' }}>
+
+                    {/* Card Header */}
+                    <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid rgba(253,230,138,0.6)', background: 'linear-gradient(135deg, rgba(253,230,138,0.5) 0%, rgba(255,255,255,0.4) 100%)', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: '0.75rem', background: 'rgba(245,158,11,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Fingerprint size={20} color="#F59E0B" /></div>
+                            <div>
+                                <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '1.1rem', color: '#0B1220' }}>Data & AI Risk Agent</div>
+                                <div style={{ fontSize: '0.8rem', color: '#64748B', fontStyle: 'italic' }}>"Is the model a wrapper, or a true moat?"</div>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                            <div style={{ position: 'relative', width: 72, height: 72 }}>
+                                <ScoreRing score={45} color="#EF4444" size={72} />
+                                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1.35rem', color: '#EF4444' }}>45</span>
+                                    <span style={{ fontSize: '0.6rem', color: '#94A3B8' }}>/100</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#EF4444', borderRadius: '2rem', padding: '0.25rem 0.75rem', fontSize: '0.78rem', fontWeight: 700, marginBottom: '0.35rem', textAlign: 'center' }}>High Data Risk</div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    {[{ l: 'Data Moat', s: 42, c: '#F59E0B' }, { l: 'AI Safety', s: 35, c: '#EF4444' }, { l: 'Lock-in', s: 58, c: '#F59E0B' }].map(m => (
+                                        <div key={m.l} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(254,243,199,0.8)', borderRadius: '0.5rem', padding: '0.4rem 0.5rem', textAlign: 'center', minWidth: 45 }}>
+                                            <div style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.9rem', color: m.c }}>{m.s}</div>
+                                            <div style={{ fontSize: '0.62rem', color: '#94A3B8' }}>{m.l}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Verdict */}
+                    <div style={{ margin: '1.25rem 1.75rem 0', background: 'rgba(239,68,68,0.07)', border: '1px solid rgba(239,68,68,0.18)', borderLeft: '3px solid #EF4444', borderRadius: '0 0.625rem 0.625rem 0', padding: '0.875rem 1.25rem', fontFamily: 'Sora', fontWeight: 600, fontSize: '0.9rem', color: '#0B1220' }}>
+                        "Currently just an OpenAI wrapper with no proprietary data moat. High risk of prompt injection and PII leakage. Needs local model fallback."
+                    </div>
+
+                    <div style={{ padding: '1.25rem 1.75rem 1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+                        {/* AI Risks + Data Moat */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.25rem' }}>
+
+                            {/* Hallucinations & Bias */}
+                            <div style={{ background: 'rgba(254,243,199,0.3)', border: '1px solid rgba(245,158,11,0.15)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <ShieldAlert size={14} color="#F59E0B" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>AI Safety & Privacy Risks</span>
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                    {AI_RISKS.map((risk, i) => {
+                                        const Icon = risk.icon;
+                                        return (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.875rem', background: 'rgba(255,255,255,0.7)', border: `1px solid ${aiRiskColor(risk.level)}30`, borderRadius: '0.75rem' }}>
+                                                <div style={{ background: aiRiskBg(risk.level), borderRadius: '0.5rem', padding: '0.4rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                                                    <Icon size={16} color={aiRiskColor(risk.level)} />
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.3rem' }}>
+                                                        <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>{risk.risk}</span>
+                                                        <span style={{ fontSize: '0.65rem', fontWeight: 700, color: aiRiskColor(risk.level), background: aiRiskBg(risk.level), padding: '0.15rem 0.5rem', borderRadius: 4 }}>{risk.level}</span>
+                                                    </div>
+                                                    <div style={{ fontSize: '0.7rem', color: '#475569', lineHeight: 1.4 }}>{risk.impact}</div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Data Moat Defensibility */}
+                            <div style={{ background: '#0F1A2E', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '0.875rem', padding: '1.25rem', color: '#E2E8F0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                    <Database size={14} color="#FBBF24" />
+                                    <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#E2E8F0' }}>Data Moat Defensibility</span>
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.875rem' }}>
+                                    {DATA_MOAT.map((dm, i) => (
+                                        <div key={i} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.625rem', padding: '0.875rem' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '0.4rem' }}>
+                                                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#E2E8F0' }}>{dm.asset}</span>
+                                                <span style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.8rem', color: dm.score >= 70 ? '#10B981' : dm.score >= 40 ? '#F59E0B' : '#EF4444' }}>{dm.score}/100</span>
+                                            </div>
+                                            <div style={{ width: '100%', height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, marginBottom: '0.5rem', overflow: 'hidden' }}>
+                                                <div style={{ width: `${dm.score}%`, height: '100%', background: dm.score >= 70 ? '#10B981' : dm.score >= 40 ? '#F59E0B' : '#EF4444', borderRadius: 2 }} />
+                                            </div>
+                                            <div style={{ fontSize: '0.65rem', color: '#94A3B8', lineHeight: 1.3 }}>{dm.note}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Model Dependency Breakdown */}
+                        <div style={{ background: 'rgba(254,243,199,0.2)', border: '1px solid rgba(245,158,11,0.12)', borderRadius: '0.875rem', padding: '1.25rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem' }}>
+                                <Brain size={14} color="#F59E0B" />
+                                <span style={{ fontFamily: 'Sora', fontWeight: 700, fontSize: '0.85rem', color: '#0B1220' }}>Model Dependency & Provider Lock-in</span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                                {MODEL_DEPENDENCY.map((mod, i) => (
+                                    <div key={i} style={{ background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(253,230,138,0.8)', borderTop: `3px solid ${i === 0 ? '#EF4444' : i === 1 ? '#F59E0B' : '#10B981'}`, borderRadius: '0.625rem', padding: '1rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0B1220' }}>{mod.provider}</span>
+                                            <span style={{ fontFamily: 'Sora', fontWeight: 800, fontSize: '1rem', color: '#475569' }}>{mod.usage}</span>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', fontSize: '0.7rem' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <span style={{ color: '#64748B' }}>Primary Risk</span>
+                                                <span style={{ color: '#0B1220', fontWeight: 600 }}>{mod.risk}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <span style={{ color: '#64748B' }}>Contingency</span>
+                                                <span style={{ color: '#0B1220', fontWeight: 600 }}>{mod.backup}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                     </div>
